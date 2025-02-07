@@ -1,0 +1,237 @@
+<div *ngIf="formVisible"
+class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto">
+<div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl h-[80vh] overflow-y-auto">
+  <div class="flex justify-end">
+    <button
+    class="items-center justify-center border-2 border-gray-500 text-gray-500 rounded-full hover:border-gray-700 hover:text-gray-700 transition duration-300 mt-1"
+    (click)="toggleFormVisibility()">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+  </div>
+
+  <h1 *ngIf="!isUpdate" class="text-2xl font-bold mb-8 text-center">Agregar Producto</h1>
+  <h1 *ngIf="isUpdate" class="text-2xl font-bold mb-8 text-center">Editar Producto</h1>
+
+  <form id="form" novalidate [formGroup]="formProduct">
+
+    <!--Código de barras-->
+    <div class="relative z-0 w-full mb-5">
+      <input type="text" name="barcode" placeholder=" " required formControlName="barcode"
+        class=" form-control pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" />
+      <label for="name" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Código de Barras</label>
+      <span class="text-sm text-red-600 hidden" id="error">Código de barras es obligatorio</span>
+    </div>
+
+    <!--producto-->
+    <div class="relative z-0 w-full mb-5">
+      <input type="text" name="name" placeholder=" " required formControlName="name"
+        class=" form-control pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" />
+      <label for="name" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Nombre del Producto</label>
+      <span class="text-sm text-red-600 hidden" id="error">Nombre del producto es obligatorio</span>
+    </div>
+
+    <!--precios-->
+    <div class="flex flex-row space-x-4">
+
+      <div class="relative z-0 w-full mb-5">
+        <input type="number" name="purchasePrice" placeholder=" " formControlName="purchasePrice"
+          class="pt-3 pb-2 pl-5 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" />
+        <div class="absolute top-0 left-0 mt-3 ml-1 text-gray-400">$</div>
+        <label for="money" class="absolute duration-300 top-3 left-5 -z-1 origin-0 text-gray-500">Precio de
+          compra</label>
+        <span class="text-sm text-red-600 hidden" id="error">Amount is required</span>
+      </div>
+
+      <div class="relative z-0 w-full mb-5">
+        <input type="number" name="salePrice" placeholder=" " formControlName="salePrice"
+          class="pt-3 pb-2 pl-5 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" />
+        <div class="absolute top-0 left-0 mt-3 ml-1 text-gray-400">$</div>
+        <label for="money" class="absolute duration-300 top-3 left-5 -z-1 origin-0 text-gray-500">Precio de
+          Venta</label>
+        <span class="text-sm text-red-600 hidden" id="error">Amount is required</span>
+      </div>
+
+      <div class="relative z-0 w-full mb-5">
+        <input type="number" name="wholesalePrice" placeholder=" " formControlName="wholesalePrice"
+          class="pt-3 pb-2 pl-5 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" />
+        <div class="absolute top-0 left-0 mt-3 ml-1 text-gray-400">$</div>
+        <label for="money" class="absolute duration-300 top-3 left-5 -z-1 origin-0 text-gray-500">Precio al
+          Mayor</label>
+        <span class="text-sm text-red-600 hidden" id="error">Amount is required</span>
+      </div>
+    </div>
+
+    <!--stocks-->
+    <div class="flex flex-row space-x-4">
+      <div class="relative z-0 w-full mb-5">
+        <input type="number" name="stock" placeholder=" " formControlName="stock"
+          class="pt-3 pb-2 pl-5 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" />
+        <div class="absolute top-0 left-0 mt-3 ml-1 text-gray-400">⨣</div>
+        <label for="money" class="absolute duration-300 top-3 left-5 -z-1 origin-0 text-gray-500">Stock</label>
+        <span class="text-sm text-red-600 hidden" id="error">Amount is required</span>
+      </div>
+
+      <div class="relative z-0 w-full mb-5">
+        <input type="number" name="minimumStock" placeholder=" " formControlName="minimumStock"
+          class="pt-3 pb-2 pl-5 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" />
+        <div class="absolute top-0 left-0 mt-3 ml-1 text-gray-400">⨦</div>
+        <label for="money" class="absolute duration-300 top-3 left-5 -z-1 origin-0 text-gray-500">Stock
+          Minimo</label>
+        <span class="text-sm text-red-600 hidden" id="error">Amount is required</span>
+      </div>
+    </div>
+    <!--Ubicación-->
+    <div class="relative z-0 w-full mb-5">
+      <input type="text" name="location" placeholder=" " required formControlName="location"
+        class=" form-control pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" />
+      <label for="name" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Ubicación del
+        Producto</label>
+      <span class="text-sm text-red-600 hidden" id="error">Category name is required</span>
+    </div>
+
+    <!--Selectores-->
+    <div class="flex flex-row space-x-4">
+
+      <div class="relative z-0 w-full mb-5">
+        <select name="Category" value="" formControlName="category"
+          onclick="this.setAttribute('value', this.value);"
+          class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none z-1 focus:outline-none focus:ring-0 focus:border-black border-gray-200">
+          <option value="" selected disabled hidden></option>
+          <option *ngFor="let item of listCategories" [value]="item.id">{{item.name}}</option>
+
+        </select>
+        <label *ngIf="!isUpdate" for="select"
+          class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Seleccione una categoría</label>
+        <label *ngIf="isUpdate" for="select"
+          class="absolute duration-300 top-3 -z-1 origin-0 text-gray-50">Seleccione una categoría</label>
+        <span class="text-sm text-red-600 hidden" id="error">Option has to be selected</span>
+      </div>
+      <div class="relative z-0 w-full mb-5">
+        <select name="Distributor" value="" onclick="this.setAttribute('value', this.value);"
+          formControlName="distributor"
+          class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none z-1 focus:outline-none focus:ring-0 focus:border-black border-gray-200">
+          <option value="" selected disabled hidden></option>
+          <option *ngFor="let item of listDistributors" [value]="item.id">{{item.name}}</option>
+
+        </select>
+        <label *ngIf="!isUpdate" for="select"
+          class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Seleccione un Distribuidor</label>
+        <label *ngIf="isUpdate" for="select"
+          class="absolute duration-300 top-3 -z-1 origin-0 text-gray-50">Seleccione un Distribuidora</label>
+        <span class="text-sm text-red-600 hidden" id="error">Option has to be selected</span>
+      </div>
+    </div>
+
+    <div class="flex flex-row space-x-4">
+
+      <!--Selectores-->
+      <div class="relative z-0 w-full mb-5">
+        <select name="salesForm" value="" onclick="this.setAttribute('value', this.value);"
+          formControlName="salesForm"
+          class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none z-1 focus:outline-none focus:ring-0 focus:border-black border-gray-200">
+          <option value="" selected disabled hidden></option>
+          <option *ngFor="let item of listSalesForms" [value]="item.id">{{item.name}}</option>
+
+        </select>
+        <label *ngIf="!isUpdate" for="select"
+          class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Seleccione una Forma de Venta</label>
+        <label *ngIf="isUpdate" for="select"
+          class="absolute duration-300 top-3 -z-1 origin-0 text-gray-50">Seleccione una Forma de Venta</label>
+        <span class="text-sm text-red-600 hidden" id="error">Option has to be selected</span>
+      </div>
+
+      <!--Fecha de vencimiento-->
+      <div class="relative z-0 w-full mb-5">
+        <input type="date" name="expirationDate" placeholder=" " formControlName="expirationDate"
+          onclick="this.setAttribute('type', 'date');"
+          class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200" />
+        <label for="date" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Fecha de
+          Vencimiento</label>
+        <span class="text-sm text-red-600 hidden" id="error">Date is required</span>
+      </div>
+    </div>
+
+    <!--botones-->
+    <div class="flex justify-center space-x-4 mt-6">
+      <button
+      id="button"
+        *ngIf="!isUpdate"
+        type="submit"
+        (click)="save()"
+        class="px-5 py-2 text-sm text-white bg-blue-500 border border-blue-500 shadow-sm font-medium tracking-wider rounded-full hover:shadow-lg hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+              class="w-5 h-5 text-inherit"
+            >
+<path xmlns="http://www.w3.org/2000/svg" d="M18,12c-3.31,0-6,2.69-6,6s2.69,6,6,6,6-2.69,6-6-2.69-6-6-6Zm2.41,7.41l-1.71,1.71c-.2,.2-.45,.29-.71,.29s-.51-.1-.71-.29c-.39-.39-.39-1.02,0-1.41l.71-.71h-3c-.55,0-1-.45-1-1s.45-1,1-1h3l-.71-.71c-.39-.39-.39-1.02,0-1.41s1.02-.39,1.41,0l1.71,1.71c.39,.39,.58,.9,.58,1.41,0,0,0,0,0,0s0,0,0,0c0,.51-.2,1.02-.58,1.41Zm-9.83,1.59H5c-2.76,0-5-2.24-5-5V5C0,2.24,2.24,0,5,0V6c0,1.1,.9,2,2,2h7c1.1,0,2-.9,2-2V.28c.33,.15,.64,.35,.89,.61l3.24,3.27c.56,.56,.87,1.31,.87,2.11v3.73c0,.19-.07,.37-.17,.53-.88-.34-1.84-.53-2.83-.53-1.73,0-3.33,.56-4.64,1.5-.63-.9-1.68-1.5-2.86-1.5-1.93,0-3.5,1.57-3.5,3.5,0,1.78,1.35,3.24,3.08,3.46-.04,.34-.08,.69-.08,1.04,0,1.06,.21,2.07,.59,3Zm3.41-15H7V0h7V6Zm-2.14,6.88c-.53,.63-.95,1.34-1.27,2.11-.03,0-.06,0-.09,0-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5c.6,0,1.12,.36,1.36,.88Z"/>
+            </svg>
+        Crear
+      </button>
+      <button
+      id="button"
+        *ngIf="isUpdate"
+        type="submit"
+        (click)="update()"
+        class="px-5 py-2 text-sm text-white bg-blue-500 border border-blue-500 shadow-sm font-medium tracking-wider rounded-full hover:shadow-lg hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+              class="w-5 h-5 text-inherit"
+            >
+              <path xmlns="http://www.w3.org/2000/svg" d="m6,0C2.686,0,0,2.686,0,6s2.686,6,6,6,6-2.686,6-6S9.314,0,6,0Zm3.692,5.722l-2.712,2.605c-.452.446-1.052.671-1.653.671s-1.204-.225-1.664-.674l-1.132-1.108c-.395-.387-.401-1.02-.015-1.414.386-.395,1.019-.401,1.414-.016l1.132,1.108c.144.142.379.141.522,0l2.723-2.614c.398-.381,1.032-.37,1.414.029.383.398.37,1.031-.029,1.414Zm3.577,9.759c-.813.813-1.27,1.915-1.27,3.065v1.455h1.455c1.15,0,2.252-.457,3.065-1.27l6.807-6.807c.897-.897.897-2.353,0-3.25-.897-.897-2.353-.897-3.25,0l-6.807,6.807Zm7.73,1.598v2.922c0,2.209-1.791,4-4,4H7c-2.209,0-4-1.791-4-4v-6.589c.927.377,1.939.589,3,.589,4.411,0,8-3.589,8-8,0-.339-.028-.672-.069-1h3.069c1.193,0,2.254.536,2.987,1.367-.48.209-.933.5-1.325.892l-6.808,6.808c-1.187,1.188-1.855,2.798-1.855,4.478v1.455c0,1.105.895,2,2,2h1.455c1.679,0,3.29-.667,4.478-1.855l3.067-3.067Z"/>
+            </svg>
+        Actualizar
+      </button>
+      <button
+      type="button"
+      (click)="toggleFormVisibility()"
+      class="px-5 py-2 text-sm text-gray-600 bg-white border shadow-sm font-medium tracking-wider rounded-full hover:shadow-lg hover:bg-gray-100 disabled:opacity-50 flex items-center gap-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+            class="w-5 h-5 text-inherit"
+          >
+            <path xmlns="http://www.w3.org/2000/svg" d="m18,12c-3.314,0-6,2.686-6,6s2.686,6,6,6,6-2.686,6-6-2.686-6-6-6Zm2.707,7.293c.391.391.391,1.023,0,1.414-.195.195-.451.293-.707.293s-.512-.098-.707-.293l-1.293-1.293-1.293,1.293c-.195.195-.451.293-.707.293s-.512-.098-.707-.293c-.391-.391-.391-1.023,0-1.414l1.293-1.293-1.293-1.293c-.391-.391-.391-1.023,0-1.414s1.023-.391,1.414,0l1.293,1.293,1.293-1.293c.391-.391,1.023-.391,1.414,0s.391,1.023,0,1.414l-1.293,1.293,1.293,1.293ZM12,7V.46c.913.346,1.753.879,2.465,1.59l3.484,3.486c.712.711,1.245,1.551,1.591,2.464h-6.54c-.552,0-1-.449-1-1Zm.721,17h-7.721c-2.757,0-5-2.243-5-5V5C0,2.243,2.243,0,5,0h4.515c.163,0,.324.013.485.024v6.976c0,1.654,1.346,3,3,3h5c-4.418,0-8,3.582-8,8,0,2.393,1.056,4.534,2.721,6Z"/>
+          </svg>
+      Cancelar
+    </button>
+    </div>
+  </form>
+</div>
+</div>
+
+<script>
+    'use strict'
+  
+    document.getElementById('button').addEventListener('click', toggleError)
+    const errMessages = document.querySelectorAll('#error')
+  
+    function toggleError() {
+      // Show error message
+      errMessages.forEach((el) => {
+        el.classList.toggle('hidden')
+      })
+  
+      // Highlight input and label with red
+      const allBorders = document.querySelectorAll('.border-gray-200')
+      const allTexts = document.querySelectorAll('.text-gray-500')
+      allBorders.forEach((el) => {
+        el.classList.toggle('border-red-600')
+      })
+      allTexts.forEach((el) => {
+        el.classList.toggle('text-red-600')
+      })
+    }
+  </script>

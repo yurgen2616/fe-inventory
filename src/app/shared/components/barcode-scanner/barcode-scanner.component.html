@@ -1,0 +1,19 @@
+<div *ngIf="scannerActive" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-md relative">
+      <div class="w-full h-64">
+        <zxing-scanner
+          [formats]="scannerFormats"
+          (scanSuccess)="onScanSuccess($event)"
+          (scanError)="onScanError($event)"
+        ></zxing-scanner>
+      </div>
+      <br>
+      <br>
+      <button
+        (click)="toggleScanner()"
+        class="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600"
+      >
+        Cerrar Escáner
+      </button>
+    </div>
+  </div>

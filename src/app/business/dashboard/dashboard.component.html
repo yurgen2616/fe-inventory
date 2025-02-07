@@ -1,0 +1,117 @@
+<div class="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-3">
+
+
+  <!-- Total Sales Card -->
+  <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+    <div
+      class="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-orange-600 to-orange-400 text-white shadow-orange-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+        class="w-6 h-6 text-white">
+        <path
+          d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z">
+        </path>
+      </svg>
+    </div>
+    <div class="p-4 text-right">
+      <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Ventas Totales</p>
+      <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+        ${{ totalSales | number:'1.2-2' }}
+      </h4>
+    </div>
+  </div>
+
+  <!-- Total Margin Card -->
+  <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+    <div
+      class="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-green-600 to-green-400 text-white shadow-green-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+        class="w-6 h-6 text-white">
+        <path xmlns="http://www.w3.org/2000/svg" d="m8,10.5v12c0,.829-.671,1.5-1.5,1.5s-1.5-.671-1.5-1.5v-12c0-.829.671-1.5,1.5-1.5s1.5.671,1.5,1.5Zm3.5-4.5c-.829,0-1.5.671-1.5,1.5v15c0,.829.671,1.5,1.5,1.5s1.5-.671,1.5-1.5V7.5c0-.829-.671-1.5-1.5-1.5ZM1.5,12c-.829,0-1.5.671-1.5,1.5v9c0,.829.671,1.5,1.5,1.5s1.5-.671,1.5-1.5v-9c0-.829-.671-1.5-1.5-1.5Zm22.5,6.413c0-1.476-.885-2.783-2.255-3.331l-2.376-.95c-.225-.09-.369-.304-.369-.545,0-.324.264-.587.587-.587h1.181c.181,0,.343.094.434.251.415.718,1.333.962,2.05.547.717-.415.962-1.333.548-2.049-.499-.864-1.344-1.465-2.299-1.67v-.579c0-.829-.672-1.5-1.5-1.5s-1.5.671-1.5,1.5v.669c-1.448.461-2.5,1.819-2.5,3.418,0,1.476.885,2.783,2.255,3.331l2.376.95c.225.09.369.304.369.545,0,.324-.264.587-.587.587h-1.181c-.181,0-.343-.094-.434-.25-.416-.717-1.334-.962-2.05-.547-.717.415-.962,1.333-.548,2.049.499.863,1.343,1.464,2.299,1.67v.578c0,.829.672,1.5,1.5,1.5s1.5-.671,1.5-1.5v-.669c1.448-.461,2.5-1.819,2.5-3.418Zm-2.5-11.913c.828,0,1.5-.671,1.5-1.5V1.5c0-.829-.672-1.5-1.5-1.5s-1.5.671-1.5,1.5v3.5c0,.829.672,1.5,1.5,1.5Zm-3.5,0v-2c0-.829-.672-1.5-1.5-1.5s-1.5.671-1.5,1.5v2c0,.829.672,1.5,1.5,1.5s1.5-.671,1.5-1.5Z"/>
+      </svg>
+    </div>
+    <div class="p-4 text-right">
+      <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Ganancias Totales</p>
+      <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+        ${{ totalMargin | number:'1.2-2' }}
+      </h4>
+    </div>
+  </div>
+
+  <!-- Number of Sales Card -->
+  <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+    <div
+      class="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-blue-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+        class="w-6 h-6 text-white">
+        <path xmlns="http://www.w3.org/2000/svg" d="M22.5,9a1.5,1.5,0,0,0,0-3H18.872l.613-4.288a1.5,1.5,0,1,0-2.97-.424L15.842,6H9.872l.613-4.288a1.5,1.5,0,1,0-2.97-.424L6.842,6H2.5a1.5,1.5,0,0,0,0,3H6.413l-.857,6H1.5a1.5,1.5,0,0,0,0,3H5.128l-.613,4.288a1.5,1.5,0,0,0,2.97.424L8.158,18h5.97l-.613,4.288a1.5,1.5,0,0,0,2.97.424L17.158,18H21.5a1.5,1.5,0,0,0,0-3H17.587l.857-6Zm-7.944,6H8.587l.857-6h5.969Z"/>
+      </svg>
+    </div>
+    <div class="p-4 text-right">
+      <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Número de Ventas</p>
+      <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+        {{ numberOfSales }}
+      </h4>
+    </div>
+  </div>
+</div>
+<!-- Selector de periodo -->
+
+<div class="col-span-full mb-4">
+  <div class="px-6 w-full relative">
+    <div class="bg-gray-300 h-2 w-full rounded-full relative">
+      <span class="bg-gray-700 h-4 w-4 absolute top-0 -ml-2 -mt-1 z-10 shadow rounded-full cursor-pointer"
+        [style.left.%]="sliderPosition" (mousedown)="startSliderDrag($event)"
+        (touchstart)="startSliderDrag($event)"></span>
+      <span class="bg-blue-500 h-2 absolute left-0 top-0 rounded-full" [style.width.%]="sliderPosition"></span>
+
+      <!-- Period Markers -->
+      <div *ngFor="let option of periodOptions; let i = index"
+        class="absolute top-0 -mt-1 transform -translate-x-1/2 cursor-pointer"
+        [style.left.%]="(i / (periodOptions.length - 1)) * 100" (click)="selectPeriodByIndex(i)">
+        <span class="block h-4 w-4 rounded-full transition-all duration-200"
+          [class.bg-blue-500]="selectedPeriodIndex === i" [class.bg-gray-300]="selectedPeriodIndex !== i"></span>
+      </div>
+    </div>
+
+    <div class="flex justify-between mt-2 text-xs text-gray-600">
+      <span *ngFor="let option of periodOptions; let i = index" class="w-8 text-center"
+        [class.font-bold]="selectedPeriodIndex === i">
+        {{ option.label }}
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-1">
+
+<!-- dashboard.component.html -->
+<div class="p-6">
+  <!-- Selector de vista con animación en hover -->
+  <div class="mb-6">
+    <select 
+      [ngModel]="selectedView"
+      (ngModelChange)="onViewChange($event)"
+      class="px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 hover:shadow-md"
+      [disabled]="isLoading">
+      <option *ngFor="let option of viewOptions" [value]="option.value">
+        {{option.label}}
+      </option>
+    </select>
+  </div>
+
+  <!-- Contenedor de la gráfica con estado de carga -->
+  <div class="relative">
+    <!-- Overlay de carga -->
+    <div *ngIf="isLoading" 
+         class="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-10">
+      <div class="flex flex-col items-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <span class="mt-2 text-gray-600">Cargando datos...</span>
+      </div>
+    </div>
+    
+    <!-- Canvas de la gráfica -->
+    <canvas #salesChart height="400"></canvas>
+  </div>
+</div>
+</div>

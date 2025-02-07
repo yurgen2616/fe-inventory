@@ -1,0 +1,103 @@
+<div class="space-y-4">
+    <!-- Controles superiores -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+      <!-- Selector de filas por página y buscador -->
+      <div class="flex items-center gap-4">
+        <!-- Selector de filas por página -->
+        <div>
+          <label for="rowsPerPage" class="sr-only">Filas por página:</label>
+          <select id="rowsPerPage" 
+                  [ngModel]="rowsPerPage" 
+                  (ngModelChange)="onRowsPerPageChange($event)"
+                  class="border border-gray-300 rounded-md p-2">
+            <option *ngFor="let option of rowsPerPageOptions" [value]="option">
+              {{ option }}
+            </option>
+          </select>
+        </div>
+  
+        <!-- Buscador -->
+        <div class="relative w-56">
+          <input [(ngModel)]="searchTerm" 
+                 (input)="onSearchInput(searchTerm)"
+                 class="peer w-full h-10 bg-transparent text-gray-700 placeholder-gray-400 border rounded px-3 py-2"
+                 [placeholder]="searchPlaceholder" />
+          <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition"
+                  (click)="clearSearch()">
+            <ng-container *ngIf="searchTerm; else showMagnifier">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.75 7.75l8.5 8.5m0-8.5l-8.5 8.5" />
+              </svg>
+            </ng-container>
+            <ng-template #showMagnifier>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <circle cx="11" cy="11" r="6" stroke-linecap="round" stroke-linejoin="round" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.5 15.5L20 20" />
+              </svg>
+            </ng-template>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Paginación -->
+    <div class="flex justify-center mt-4">
+      <nav>
+        <ul class="flex">
+          <!-- Primera página -->
+          <li>
+            <button (click)="onPageChange(1)" 
+                    [disabled]="currentPage === 1"
+                    class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-gray-200 disabled:opacity-50"
+                    aria-label="First">
+              <span class="material-icons text-sm">first_page</span>
+            </button>
+          </li>
+  
+          <!-- Página anterior -->
+          <li>
+            <button (click)="onPageChange(currentPage - 1)" 
+                    [disabled]="currentPage === 1"
+                    class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-gray-200 disabled:opacity-50"
+                    aria-label="Previous">
+              <span class="material-icons text-sm">keyboard_arrow_left</span>
+            </button>
+          </li>
+  
+          <!-- Números de página -->
+          <li *ngFor="let page of [].constructor(totalPages); let i = index">
+            <button (click)="onPageChange(i + 1)" 
+                    [class.bg-blue-500]="currentPage === i + 1"
+                    [class.text-white]="currentPage === i + 1"
+                    [class.border-blue-gray-100]="currentPage !== i + 1"
+                    [class.text-blue-gray-500]="currentPage !== i + 1"
+                    class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border p-0 text-sm transition duration-150 ease-in-out hover:bg-gray-200">
+              {{ i + 1 }}
+            </button>
+          </li>
+  
+          <!-- Página siguiente -->
+          <li>
+            <button (click)="onPageChange(currentPage + 1)"
+                    [disabled]="currentPage === totalPages"
+                    class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-gray-200 disabled:opacity-50"
+                    aria-label="Next">
+              <span class="material-icons text-sm">keyboard_arrow_right</span>
+            </button>
+          </li>
+  
+          <!-- Última página -->
+          <li>
+            <button (click)="onPageChange(totalPages)"
+                    [disabled]="currentPage === totalPages"
+                    class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-gray-200 disabled:opacity-50"
+                    aria-label="Last">
+              <span class="material-icons text-sm">last_page</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>

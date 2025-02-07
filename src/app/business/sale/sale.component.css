@@ -1,0 +1,32 @@
+.no-arrows::-webkit-inner-spin-button,
+.no-arrows::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input:focus~label,
+select:focus~label {
+  /* @apply text-black; left-0; */
+  --tw-text-opacity: 1;
+  color: rgba(0, 0, 0, var(--tw-text-opacity));
+  left: 0px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0px; /* Ancho de la barra de scroll */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Fondo de la pista del scroll */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #052f729c; /* Color azul del scroll */
+  border-radius: 4px; /* Bordes redondeados */
+  border: 2px solid transparent; /* Espacio alrededor del scroll */
+  background-clip: content-box; /* Ajuste de borde */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #053d72c9; /* Azul más oscuro al pasar el mouse */
+}

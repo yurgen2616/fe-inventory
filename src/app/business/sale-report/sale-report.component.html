@@ -1,0 +1,268 @@
+<div class="container mx-auto p-1">
+  <!-- Report Generation Form -->
+  <form *ngIf="!reportGenerated" [formGroup]="reportForm" (ngSubmit)="generateReport()"
+    class="mb-6 bg-white p-3 rounded-lg shadow-md">
+    <div class="grid md:grid-cols-3 gap-4">
+      <div>
+        <label class="block text-gray-700 font-sans font-bold mb-2" for="startDate">Fecha de inicio</label>
+        <input type="datetime-local" id="startDate" formControlName="startDate"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div>
+        <label class="block text-gray-700 font-sans font-bold mb-2" for="endDate">Fecha de fin</label>
+        <input type="datetime-local" id="endDate" formControlName="endDate"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div class="flex items-end p-1">
+        <button *ngIf="access.canGenerateReport" type="submit"
+          class="px-5 py-2 text-sm text-white bg-blue-500 border border-blue-500 shadow-sm font-medium tracking-wider rounded-full hover:shadow-lg hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+            class="w-5 h-5 text-inherit">
+            <path xmlns="http://www.w3.org/2000/svg"
+              d="M19.4,18c0,.772-.628,1.4-1.4,1.4s-1.4-.628-1.4-1.4,.628-1.4,1.4-1.4,1.4,.628,1.4,1.4Zm-1.4-6c-3.314,0-6,2.686-6,6s2.686,6,6,6,6-2.686,6-6-2.686-6-6-6Zm3,6c0,.536-.153,1.033-.4,1.469l.65,.65c.312,.312,.312,.819,0,1.132-.312,.312-.819,.312-1.131,0l-.65-.65c-.436,.247-.932,.4-1.469,.4s-1.033-.153-1.469-.4l-.65,.65c-.312,.312-.819,.312-1.131,0-.313-.312-.313-.819,0-1.132l.65-.65c-.247-.436-.4-.932-.4-1.469s.153-1.033,.4-1.469l-.65-.65c-.312-.312-.312-.819,0-1.132,.312-.312,.819-.312,1.131,0l.65,.65c.436-.247,.932-.4,1.469-.4s1.033,.153,1.469,.4l.65-.65c.312-.312,.819-.312,1.131,0,.313,.312,.313,.819,0,1.132l-.65,.65c.247,.436,.4,.932,.4,1.469Zm-3.888-8h4.847c.643,.002,1.248-.303,1.629-.822,.282-.38,.426-.843,.411-1.316-.008-.164-.035-.327-.08-.486-.234-.872-.584-1.708-1.038-2.487C21.512,2.543,19.278,.827,16.658,.112c-.173-.047-.559-.074-.559-.074-.138,0-.732,0-1.203,.381-.691,.544-.8,1.163-.81,1.211-.036,.151-.055,.307-.055,.462V6.919c0,1.702,1.379,3.081,3.081,3.081Zm-7.112,8c0-2.531,1.178-4.783,3.012-6.249-.608-.344-1.023-.988-1.023-1.736V5.283c.003-.933-.429-1.815-1.167-2.386-.7-.554-1.618-.752-2.484-.535C2.452,3.824-1.135,9.781,.326,15.667c1.029,4.147,4.371,7.321,8.566,8.135,1.251,.239,2.494,.25,3.689,.071-1.583-1.462-2.581-3.548-2.581-5.873Z" />
+                      
+          </svg>
+          Generar Reporte
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Error Handling -->
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+    <span class="block sm:inline">{{ error }}</span>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="flex justify-center items-center">
+    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+  </div>
+
+  <!-- Sales Report Section -->
+  <div *ngIf="!loading && sales.length > 0">
+    <!-- Stats Cards -->
+    <div class="mb-1 py-4 grid gap-y-6 gap-x-6 md:grid-cols-3">
+      <!-- Total Sales Card -->
+      <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+        <div
+          class="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-orange-600 to-orange-400 text-white shadow-orange-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+            class="w-6 h-6 text-white">
+            <path
+              d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z">
+            </path>
+          </svg>
+        </div>
+        <div class="p-4 text-right">
+          <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Ventas Totales
+          </p>
+          <h4
+            class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+            {{ calculateTotalSales() | currency }}
+          </h4>
+        </div>
+      </div>
+
+      <!-- Total Margin Card -->
+      <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+        <div
+          class="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-green-600 to-green-400 text-white shadow-green-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+            class="w-6 h-6 text-white">
+            <path xmlns="http://www.w3.org/2000/svg"
+              d="m8,10.5v12c0,.829-.671,1.5-1.5,1.5s-1.5-.671-1.5-1.5v-12c0-.829.671-1.5,1.5-1.5s1.5.671,1.5,1.5Zm3.5-4.5c-.829,0-1.5.671-1.5,1.5v15c0,.829.671,1.5,1.5,1.5s1.5-.671,1.5-1.5V7.5c0-.829-.671-1.5-1.5-1.5ZM1.5,12c-.829,0-1.5.671-1.5,1.5v9c0,.829.671,1.5,1.5,1.5s1.5-.671,1.5-1.5v-9c0-.829-.671-1.5-1.5-1.5Zm22.5,6.413c0-1.476-.885-2.783-2.255-3.331l-2.376-.95c-.225-.09-.369-.304-.369-.545,0-.324.264-.587.587-.587h1.181c.181,0,.343.094.434.251.415.718,1.333.962,2.05.547.717-.415.962-1.333.548-2.049-.499-.864-1.344-1.465-2.299-1.67v-.579c0-.829-.672-1.5-1.5-1.5s-1.5.671-1.5,1.5v.669c-1.448.461-2.5,1.819-2.5,3.418,0,1.476.885,2.783,2.255,3.331l2.376.95c.225.09.369.304.369.545,0,.324-.264.587-.587.587h-1.181c-.181,0-.343-.094-.434-.25-.416-.717-1.334-.962-2.05-.547-.717.415-.962,1.333-.548,2.049.499.863,1.343,1.464,2.299,1.67v.578c0,.829.672,1.5,1.5,1.5s1.5-.671,1.5-1.5v-.669c1.448-.461,2.5-1.819,2.5-3.418Zm-2.5-11.913c.828,0,1.5-.671,1.5-1.5V1.5c0-.829-.672-1.5-1.5-1.5s-1.5.671-1.5,1.5v3.5c0,.829.672,1.5,1.5,1.5Zm-3.5,0v-2c0-.829-.672-1.5-1.5-1.5s-1.5.671-1.5,1.5v2c0,.829.672,1.5,1.5,1.5s1.5-.671,1.5-1.5Z" />
+          </svg>
+        </div>
+        <div class="p-4 text-right">
+          <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Ganancias Totales
+          </p>
+          <h4
+            class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+            {{ calculateTotalMargin() | currency }}
+          </h4>
+        </div>
+      </div>
+
+      <!-- Number of Sales Card -->
+      <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+        <div
+          class="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-blue-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+            class="w-6 h-6 text-white">
+            <path xmlns="http://www.w3.org/2000/svg"
+              d="M22.5,9a1.5,1.5,0,0,0,0-3H18.872l.613-4.288a1.5,1.5,0,1,0-2.97-.424L15.842,6H9.872l.613-4.288a1.5,1.5,0,1,0-2.97-.424L6.842,6H2.5a1.5,1.5,0,0,0,0,3H6.413l-.857,6H1.5a1.5,1.5,0,0,0,0,3H5.128l-.613,4.288a1.5,1.5,0,0,0,2.97.424L8.158,18h5.97l-.613,4.288a1.5,1.5,0,0,0,2.97.424L17.158,18H21.5a1.5,1.5,0,0,0,0-3H17.587l.857-6Zm-7.944,6H8.587l.857-6h5.969Z" />
+          </svg>
+        </div>
+        <div class="p-4 text-right">
+          <p class="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">Número de Ventas
+          </p>
+          <h4
+            class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+            {{ sales.length }}
+          </h4>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Controls Section -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+      <!-- Rows Per Page and Search -->
+      <div class="flex items-center gap-4">
+        <!-- Rows Per Page -->
+        <div>
+          <label for="rowsPerPage" class="sr-only">Filas por página:</label>
+          <select id="rowsPerPage" [(ngModel)]="rowsPerPage" (change)="changeRowsPerPage(rowsPerPage)"
+            class="border border-gray-300 rounded-md p-2">
+            <option *ngFor="let option of [5, 10, 15, 20, 50]" [value]="option">{{ option }}</option>
+          </select>
+        </div>
+
+        <!-- Search Box -->
+        <div class="relative w-56">
+          <input [(ngModel)]="searchTerm" (input)="onSearchChange()" (ngModelChange)="updatePagination()"
+            class="peer w-full h-10 bg-transparent text-gray-700 placeholder-gray-400 border rounded px-3 py-2"
+            placeholder="Buscar Venta" />
+          <button
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition"
+            (click)="clearSearch()">
+            <ng-container *ngIf="searchTerm; else showMagnifier">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.75 7.75l8.5 8.5m0-8.5l-8.5 8.5" />
+              </svg>
+            </ng-container>
+            <ng-template #showMagnifier>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <circle cx="11" cy="11" r="6" stroke-linecap="round" stroke-linejoin="round" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.5 15.5L20 20" />
+              </svg>
+            </ng-template>
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-center gap-4">
+        <!-- Botón Regenerar Reporte -->
+        <button (click)="regenerateReport()" aria-label="Regenerate Report"
+          class="px-5 py-2 text-sm text-white bg-blue-500 border border-blue-500 shadow-sm font-medium tracking-wider rounded-full hover:shadow-lg hover:bg-blue-600 disabled:opacity-50 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+            class="w-5 h-5 text-inherit">
+            <path xmlns="http://www.w3.org/2000/svg"
+              d="M19.4,18c0,.772-.628,1.4-1.4,1.4s-1.4-.628-1.4-1.4,.628-1.4,1.4-1.4,1.4,.628,1.4,1.4Zm-1.4-6c-3.314,0-6,2.686-6,6s2.686,6,6,6,6-2.686,6-6-2.686-6-6-6Zm3,6c0,.536-.153,1.033-.4,1.469l.65,.65c.312,.312,.312,.819,0,1.132-.312,.312-.819,.312-1.131,0l-.65-.65c-.436,.247-.932,.4-1.469,.4s-1.033-.153-1.469-.4l-.65,.65c-.312,.312-.819,.312-1.131,0-.313-.312-.313-.819,0-1.132l.65-.65c-.247-.436-.4-.932-.4-1.469s.153-1.033,.4-1.469l-.65-.65c-.312-.312-.312-.819,0-1.132,.312-.312,.819-.312,1.131,0l.65,.65c.436-.247,.932-.4,1.469-.4s1.033,.153,1.469,.4l.65-.65c.312-.312,.819-.312,1.131,0,.313,.312,.313,.819,0,1.132l-.65,.65c.247,.436,.4,.932,.4,1.469Zm-3.888-8h4.847c.643,.002,1.248-.303,1.629-.822,.282-.38,.426-.843,.411-1.316-.008-.164-.035-.327-.08-.486-.234-.872-.584-1.708-1.038-2.487C21.512,2.543,19.278,.827,16.658,.112c-.173-.047-.559-.074-.559-.074-.138,0-.732,0-1.203,.381-.691,.544-.8,1.163-.81,1.211-.036,.151-.055,.307-.055,.462V6.919c0,1.702,1.379,3.081,3.081,3.081Zm-7.112,8c0-2.531,1.178-4.783,3.012-6.249-.608-.344-1.023-.988-1.023-1.736V5.283c.003-.933-.429-1.815-1.167-2.386-.7-.554-1.618-.752-2.484-.535C2.452,3.824-1.135,9.781,.326,15.667c1.029,4.147,4.371,7.321,8.566,8.135,1.251,.239,2.494,.25,3.689,.071-1.583-1.462-2.581-3.548-2.581-5.873Z" />
+                      
+          </svg>
+          Volver a generar
+        </button>
+
+        <!-- Botón Exportar Excel -->
+        <button *ngIf="access.canGenerateReport" class="text-white hover:text-gray-200 transition duration-300" aria-label="Download Excel"
+          (click)="exportReport()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 48 48" width="48" height="48"
+            class="transition duration-300">
+            <path fill="#1D6F42" d="M6 8h36v32H6z"></path>
+            <path fill="#FFF" d="M16.2 30.1l3.1-6.1-3-6h2.8l1.9 4.2 2-4.2h2.6l-3.1 6.1 3.1 6h-2.8l-2.1-4.4-2.1 4.4z">
+            </path>
+            <path fill="#107C41" d="M15 6h26v36H15z"></path>
+            <path fill="#FFF" d="M24.1 18.7h6.8v2.2h-4.1v1.6h3.9v2.2h-3.9v1.7h4.1v2.2h-6.8z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="w-full overflow-hidden rounded-lg border border-gray-200 shadow-md">
+      <div class="w-full overflow-x-auto">
+        <div class="overflow-y-auto max-h-[600px]">
+          <table class="min-w-full table-auto border-collapse bg-white text-left text-sm text-gray-500">
+            <thead class="bg-gray-800 sticky top-0 z-10">
+              <tr>
+                <th scope="col" class="whitespace-nowrap px-4 py-4 font-medium text-white sm:px-6">ID Venta</th>
+                <th scope="col" class="whitespace-nowrap px-4 py-4 font-medium text-white sm:px-6">Fecha de Venta</th>
+                <th scope="col" class="whitespace-nowrap px-4 py-4 font-medium text-white sm:px-6">Total Venta</th>
+                <th scope="col" class="whitespace-nowrap px-4 py-4 font-medium text-white sm:px-6">Productos</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 border-t border-gray-100">
+              <tr *ngFor="let sale of paginatedSales" class="hover:bg-gray-50">
+                <td class="whitespace-nowrap px-4 py-4 sm:px-6">{{ sale.id }}</td>
+                <td class="whitespace-nowrap px-4 py-4 sm:px-6">{{ sale.createdAt | date:'medium' }}
+                </td>
+                <td class="whitespace-nowrap px-4 py-4 sm:px-6">{{ sale.total | currency }}</td>
+                
+
+                <td class="px-4 py-4 sm:px-6">
+                  <ul class="list-none">
+                    <li *ngFor="let detail of sale.details" class="text-sm mb-1 last:mb-0">
+                      <span class="inline-block">
+                        <!--{{ detail.product.name }}-->
+                        <div class="font-medium text-gray-700" [innerHTML]="detail.product.name | highlight:searchTerm"></div>
+                        <span class="whitespace-nowrap">({{ detail.quantity }} x {{ detail.price | currency }})</span><br>
+                        <span class="whitespace-nowrap">Vendedor: {{ sale.user.name }} {{ sale.user.lastName}}</span>
+                      </span>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-center mt-4">
+      <nav>
+        <ul class="flex">
+          <li>
+            <button (click)="changePage(1)" [disabled]="currentPage === 1"
+              class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-gray-200 disabled:opacity-50"
+              aria-label="First">
+              <span class="material-icons text-sm">first_page</span>
+            </button>
+          </li>
+          <li>
+            <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"
+              class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-gray-200 disabled:opacity-50"
+              aria-label="Previous">
+              <span class="material-icons text-sm">keyboard_arrow_left</span>
+            </button>
+          </li>
+          <!-- Page Numbers -->
+          <li *ngFor="let page of getVisiblePages()">
+            <button (click)="changePage(page)" [class.bg-blue-500]="currentPage === page"
+              [class.text-white]="currentPage === page" [class.border-blue-gray-100]="currentPage !== page"
+              [class.text-blue-gray-500]="currentPage !== page"
+              class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border p-0 text-sm transition duration-150 ease-in-out hover:bg-gray-200">
+              {{ page }}
+            </button>
+          </li>
+
+          <li>
+            <button (click)="changePage(currentPage + 1)"
+              [disabled]="currentPage === Math.ceil(filteredResults.length / rowsPerPage)"
+              class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-gray-200 disabled:opacity-50"
+              aria-label="Next">
+              <span class="material-icons text-sm">keyboard_arrow_right</span>
+            </button>
+          </li>
+          <li>
+            <button (click)="changePage(Math.ceil(filteredResults.length / rowsPerPage))"
+              [disabled]="currentPage === Math.ceil(filteredResults.length / rowsPerPage)"
+              class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-gray-200 disabled:opacity-50"
+              aria-label="Last">
+              <span class="material-icons text-sm">last_page</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- No Results Message -->
+  <div *ngIf="!loading && sales.length === 0" class="text-center font-sans text-gray-500 py-6">
+    No hay ventas en el rango seleccionado.
+  </div>
+</div>
