@@ -127,4 +127,54 @@ getSales(): Observable<SaleModel[]> {
   deleteSale(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.baseUrl}/${id}`).pipe(map(res => res));
   }
+
+  generateReceipt(saleId: number): Observable<Blob> {
+    return this.httpClient.get(`${this.baseUrl}/${saleId}/receipt`, {
+      responseType: 'blob',
+      headers: {
+        'Accept': 'application/pdf'
+      }
+    }).pipe(
+      map(response => {
+        return new Blob([response], { type: 'application/pdf' });
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error generating receipt:', error);
+        let errorMessage = 'Error al generar el recibo de venta';
+        
+        if (error.status === 404) {
+          errorMessage = 'Venta no encontrada';
+        } else if (error.status === 403) {
+          errorMessage = 'No tiene permisos para generar el recibo';
+        }
+        
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  // Método auxiliar para descargar el PDF
+  downloadReceipt(saleId: number): void {
+    this.generateReceipt(saleId).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `venta_${saleId}.pdf`;
+        
+        // Trigger la descarga
+        document.body.appendChild(link);
+        link.click();
+        
+        // Limpieza
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('Error downloading receipt:', error);
+        // Aquí podrías mostrar un mensaje de error al usuario
+      }
+    });
+  }
+
 }

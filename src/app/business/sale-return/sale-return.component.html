@@ -71,7 +71,7 @@
         <p class="text-gray-600"><span class="font-semibold">Total:</span> ${{ selectedSale.total | number:'1.2-2' }}
         </p>
         <p class="text-gray-600">
-          <span class="font-semibold">Vendedor:</span> 
+          <span class="font-semibold">Vendedor:</span>
           {{ selectedSale.user.name }} {{ selectedSale.user.lastName }}
         </p>
       </div>
@@ -89,8 +89,9 @@
           </div>
 
           <!-- Return Product Button -->
-          <button *ngIf="access.canReturnPartial" class="text-orange-500 hover:text-orange-800 transition duration-300" style="margin-top: 25px;"
-            aria-label="Return Product" (click)="returnProduct(detail.product.id, detail.quantity)">
+          <button *ngIf="access.canReturnPartial" class="text-orange-500 hover:text-orange-800 transition duration-300"
+            style="margin-top: 25px;" aria-label="Return Product"
+            (click)="returnProduct(detail.product.id, detail.quantity)">
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 48 48" width="64" height="64"
               class="transition duration-300 hover:fill-orange-700">
               <path xmlns="http://www.w3.org/2000/svg"
@@ -100,22 +101,28 @@
         </div>
       </div>
 
-      <!-- Return Entire Sale -->
-      <div *ngIf="access.canReturnEntire" class="mt-6 flex justify-center text-center">
-        <button (click)="returnEntireSale()"
-        class="px-5 py-2 text-sm text-white bg-red-500 border border-red-500 shadow-sm font-medium tracking-wider rounded-full hover:shadow-lg hover:bg-red-600 disabled:opacity-50 flex items-center gap-2"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-            class="w-5 h-5 text-inherit"
-          >
-          <path xmlns="http://www.w3.org/2000/svg"
-                d="m24,12c0,6.617-5.383,12-12,12-2.703,0-5.298-.939-7.389-2.573l-2.573,2.573v-6.021c0-.527.428-.954.955-.955h6.021l-2.265,2.265c1.516,1.09,3.348,1.711,5.251,1.711,4.963,0,9-4.037,9-9h3ZM12,3c1.912,0,3.741.618,5.255,1.707l-2.269,2.269h5.83c.633,0,1.146-.513,1.146-1.146V0l-2.573,2.573c-2.088-1.635-4.675-2.573-7.389-2.573C5.383,0,0,5.383,0,12h3C3,7.037,7.038,3,12,3Zm3,5c1.105,0,2,.895,2,2v6H7v-6c0-1.105.895-2,2-2h6Zm-1.5,2h-3v2h3v-2Z" />
-          </svg>
+      <!-- Reemplaza la sección actual de botones en sale-return.component.html -->
+
+      <!-- Contenedor para ambos botones -->
+      <div class="mt-6 flex justify-center gap-4">
+        <!-- Botón de Devolver Toda La Venta -->
+        <button *ngIf="access.canReturnEntire" (click)="returnEntireSale()"
+          class="px-5 py-2 text-sm text-white bg-red-500 border border-red-500 shadow-sm font-medium tracking-wider rounded-full hover:shadow-lg hover:bg-red-600 disabled:opacity-50 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"
+            class="w-5 h-5 text-inherit">
+            <path xmlns="http://www.w3.org/2000/svg"
+              d="m24,12c0,6.617-5.383,12-12,12-2.703,0-5.298-.939-7.389-2.573l-2.573,2.573v-6.021c0-.527.428-.954.955-.955h6.021l-2.265,2.265c1.516,1.09,3.348,1.711,5.251,1.711,4.963,0,9-4.037,9-9h3ZM12,3c1.912,0,3.741.618,5.255,1.707l-2.269,2.269h5.83c.633,0,1.146-.513,1.146-1.146V0l-2.573,2.573c-2.088-1.635-4.675-2.573-7.389-2.573C5.383,0,0,5.383,0,12h3C3,7.037,7.038,3,12,3Zm3,5c1.105,0,2,.895,2,2v6H7v-6c0-1.105.895-2,2-2h6Zm-1.5,2h-3v2h3v-2Z" />
+          </svg>
           Devolver Toda La Venta
+        </button>
+
+        <!-- Botón de Exportar Factura -->
+        <button *ngIf="access.canExportEntire" (click)="downloadSaleReceipt(selectedSale.id)"
+          class="px-5 py-2 text-sm text-white bg-green-500 border border-green-500 shadow-sm font-medium tracking-wider rounded-full hover:shadow-lg hover:bg-green-600 disabled:opacity-50 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+            <path xmlns="http://www.w3.org/2000/svg" d="M7.98,16.11c0,.47-.41,.86-.89,.86h-.83s0-1.72,0-1.72h.84c.48,0,.89,.39,.89,.86Zm7.02-8.11h6.54c-.35-.91-.88-1.75-1.59-2.46l-3.48-3.49c-.71-.71-1.55-1.24-2.46-1.59V7c0,.55,.45,1,1,1Zm-2.91,7.25h-.84v3.5s.84,0,.84,0c.48,0,.89-.39,.89-.86v-1.78c0-.47-.41-.86-.89-.86Zm9.91-4.76v8.51c0,2.76-2.24,5-5,5H7c-2.76,0-5-2.24-5-5V5C2,2.24,4.24,0,7,0h4.51c.16,0,.32,.01,.49,.02V7c0,1.65,1.35,3,3,3h6.98c.01,.16,.02,.32,.02,.49Zm-12.77,5.62c0-1.16-.96-2.11-2.14-2.11h-1.09c-.55,0-1,.45-1,1v4.44c0,.35,.28,.62,.62,.62s.62-.28,.62-.62v-1.22h.84c1.18,0,2.14-.95,2.14-2.11Zm5,0c0-1.16-.96-2.11-2.14-2.11h-1.09c-.55,0-1,.45-1,1v4.44c0,.35,.28,.56,.62,.56s1.46,0,1.46,0c1.18,0,2.14-.95,2.14-2.11v-1.78Zm4.79-1.48c0-.35-.28-.62-.62-.62h-2.31c-.35,0-.62,.28-.62,.62v4.81c0,.35,.28,.62,.62,.62s.62-.28,.62-.62v-1.8h1.24c.35,0,.62-.28,.62-.62s-.28-.62-.62-.62h-1.24v-1.14h1.69c.35,0,.62-.28,.62-.62Z"/>
+          </svg>
+          Exportar
         </button>
       </div>
     </div>

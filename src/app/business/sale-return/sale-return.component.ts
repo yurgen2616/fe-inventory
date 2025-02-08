@@ -24,6 +24,7 @@ export default class SaleReturnComponent implements OnInit {
   access = {
     canSearch: false,
     canReturnEntire: false,
+    canExportEntire: false,
     canReturnPartial: false
   };
 
@@ -56,6 +57,7 @@ export default class SaleReturnComponent implements OnInit {
     this.access = {
       canSearch: this.menuService.hasPermission('GET /sales/search'),
       canReturnEntire: this.menuService.hasPermission('POST /sales/{saleId}/return-entire'),
+      canExportEntire: this.menuService.hasPermission('GET /sales/{saleId}/receipt'),
       canReturnPartial: this.menuService.hasPermission('POST /sales/{saleId}/return'),
     };
   }
@@ -237,4 +239,53 @@ export default class SaleReturnComponent implements OnInit {
       }
     });
   }
+
+  downloadSaleReceipt(saleId: number) {
+    if (!saleId) return;
+  
+    // Mostrar indicador de carga
+    Swal.fire({
+      title: 'Generando PDF...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  
+    this.saleService.generateReceipt(saleId).subscribe({
+      next: (blob: Blob) => {
+        // Crear URL del blob
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `venta_${saleId}.pdf`;
+        
+        // Trigger la descarga
+        document.body.appendChild(link);
+        link.click();
+        
+        // Limpieza
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+  
+        // Cerrar el indicador de carga y mostrar éxito
+        Swal.fire({
+          icon: 'success',
+          title: 'PDF generado exitosamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      },
+      error: (error) => {
+        console.error('Error downloading receipt:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al generar el PDF',
+          text: 'Por favor, intente nuevamente',
+          showConfirmButton: true
+        });
+      }
+    });
+  }
+
 }
