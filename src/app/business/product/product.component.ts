@@ -147,6 +147,10 @@ export default class ProductComponent implements OnInit {
         Validators.required,
         Validators.min(0)
       ]),
+      unitSalePrice: new FormControl('', [
+        Validators.required,
+        Validators.min(0)
+      ]),
       expirationDate: new FormControl('')
     });
   }

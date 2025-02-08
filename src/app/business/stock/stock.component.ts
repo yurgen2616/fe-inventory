@@ -14,7 +14,6 @@ import { MenuService } from '../../shared/services/menu.service';
 
 @Component({
   selector: 'app-stock',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -60,11 +59,37 @@ export default class StockComponent implements OnInit {
     this.addStockForm = this.fb.group({
       quantity: ['', [Validators.required, Validators.min(1)]],
       unitPrice: ['', [Validators.required, Validators.min(0)]],
-      expirationDate: ['', Validators.required] // Consider making this required if needed
-    });
+      unitSalePrice: ['', [Validators.required, Validators.min(0)]],
+      expirationDate: ['', Validators.required]
+    }, { validators: this.validatePrices });
   }
 
-  ngOnInit(): void { this.initializeAccess(); }
+  private validatePrices(group: FormGroup) {
+    const unitPrice = group.get('unitPrice')?.value;
+    const unitSalePrice = group.get('unitSalePrice')?.value;
+
+    if (unitPrice && unitSalePrice && unitSalePrice <= unitPrice) {
+      return { invalidPrices: true };
+    }
+    return null;
+  }
+
+  ngOnInit(): void {
+    this.initializeAccess();
+    this.setupPriceCalculation();
+  }
+
+  
+  private setupPriceCalculation() {
+    this.addStockForm.get('unitPrice')?.valueChanges.subscribe(value => {
+      if (value && this.porcentual) {
+        const suggestedSalePrice = value + (value * this.porcentual / 100);
+        this.addStockForm.patchValue({
+          unitSalePrice: Number(suggestedSalePrice.toFixed(2))
+        }, { emitEvent: false });
+      }
+    });
+  }
 
   private initializeAccess(): void {
     this.access = {
@@ -72,6 +97,8 @@ export default class StockComponent implements OnInit {
       canRead: this.menuService.hasPermission('GET /categories'),
     };
   }
+
+  
 
   searchProduct() {
     if (this.searchForm.invalid) {
@@ -101,46 +128,31 @@ export default class StockComponent implements OnInit {
   }
 
   addStock() {
-    if (this.addStockForm.invalid) {
-      return;
-    }
+    if (this.addStockForm.invalid || !this.foundProduct) return;
 
-    if (!this.foundProduct) {
-      return;
-    }
-
-    const { quantity, unitPrice, expirationDate } = this.addStockForm.value;
+    const { quantity, unitPrice, unitSalePrice, expirationDate } = this.addStockForm.value;
 
     this.productService.addStock(
       this.foundProduct.id,
       quantity,
       unitPrice,
+      unitSalePrice,
       expirationDate
     ).subscribe({
       next: (updatedProduct) => {
-        console.log('Stock added successfully', updatedProduct);
         Swal.fire({
           icon: "success",
-          title: `Stock agregado al producto: ${updatedProduct.name} `,
+          title: `Stock agregado al producto: ${updatedProduct.name}`,
           showConfirmButton: false,
           timerProgressBar: true,
           timer: 1500
         });
-
-        // Reset both forms
-        this.searchForm.reset();
-        this.addStockForm.reset();
-
-        // Clear the found product and search error
-        this.foundProduct = null;
-        this.searchError = '';
+        this.resetForms();
       },
       error: (err) => {
         Swal.fire({
           icon: "error",
-          title: (`Failed to add stock. 
-            Status: ${err.status}, 
-            Message: ${err.message}`),
+          title: `Error al agregar stock: ${err.message}`,
           showConfirmButton: false,
           timerProgressBar: true,
           timer: 1500
@@ -150,7 +162,15 @@ export default class StockComponent implements OnInit {
     this.toggleFormVisibility();
   }
 
+  private resetForms() {
+    this.searchForm.reset();
+    this.addStockForm.reset();
+    this.foundProduct = null;
+    this.searchError = '';
+  }
+
   resetSearch() {
+    this.resetForms();
     this.searchForm.reset();
     this.foundProduct = null;
     this.searchError = '';
@@ -168,6 +188,14 @@ export default class StockComponent implements OnInit {
   calcularPorcentaje(): void {
     if (this.valorAPorcentuar !== null && this.porcentual !== null) {
       this.totalPorcentaje = (this.valorAPorcentuar * this.porcentual) / 100;
+      
+      const currentUnitPrice = this.addStockForm.get('unitPrice')?.value;
+      if (currentUnitPrice) {
+        const suggestedSalePrice = currentUnitPrice + (currentUnitPrice * this.porcentual / 100);
+        this.addStockForm.patchValue({
+          unitSalePrice: Number(suggestedSalePrice.toFixed(2))
+        });
+      }
     } else {
       Swal.fire({
         icon: "error",

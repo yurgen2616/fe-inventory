@@ -26,6 +26,7 @@ export class ProductModel {
     id: number = 0;
     quantity: number = 0;
     unitPrice: number = 0;
+    unitSalePrice: number = 0;
     expirationDate: string = '';
     createdAt: string = '';
   }
