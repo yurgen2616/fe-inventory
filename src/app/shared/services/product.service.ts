@@ -50,10 +50,11 @@ export class ProductService {
   }
 
   // Añadir stock a un producto
-  addStock(id: number, quantity: number, unitPrice: number, expirationDate?: string): Observable<ProductModel> {
+  addStock(id: number, quantity: number, unitPrice: number, unitSalePrice: number , expirationDate?: string): Observable<ProductModel> {
     const params = {
       quantity: quantity.toString(),
       unitPrice: unitPrice.toString(),
+      unitSalePrice: unitSalePrice.toString(),
       expirationDate: expirationDate ?? ''
     };
     return this.httpClient.put<ProductModel>(`${this.baseUrl}/${id}/add-stock`, null, { params }).pipe(map(res => res));
